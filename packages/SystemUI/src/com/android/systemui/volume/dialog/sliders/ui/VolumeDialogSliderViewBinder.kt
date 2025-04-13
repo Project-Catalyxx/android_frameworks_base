@@ -16,6 +16,8 @@
 
 package com.android.systemui.volume.dialog.sliders.ui
 
+import android.os.UserHandle
+import android.provider.Settings
 import android.view.View
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.interaction.DragInteraction
@@ -33,6 +35,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
@@ -92,6 +95,19 @@ constructor(
     }
 }
 
+@Composable
+private fun rememberVolumeHapticsEnabled(): Boolean {
+    val context = LocalContext.current
+    return remember {
+        Settings.Secure.getIntForUser(
+            context.contentResolver,
+            Settings.Secure.VOLUME_DIALOG_HAPTIC_FEEDBACK,
+            1,
+            UserHandle.USER_CURRENT,
+        ) != 0
+    }
+}
+
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 private fun VolumeDialogSlider(
@@ -127,6 +143,7 @@ private fun VolumeDialogSlider(
     val collectedSliderStateModel by viewModel.state.collectAsStateWithLifecycle(null)
     val sliderStateModel = collectedSliderStateModel ?: return
     val interactionSource = remember { MutableInteractionSource() }
+    val isHapticsEnabled = rememberVolumeHapticsEnabled()
 
     LaunchedEffect(interactionSource) {
         interactionSource.interactions.collect {
@@ -165,7 +182,7 @@ private fun VolumeDialogSlider(
         isVertical = isVolumeDialogVertical,
         colors = colors,
         interactionSource = interactionSource,
-        haptics =
+        haptics = if (isHapticsEnabled) {
             Haptics.Enabled(
                 hapticsViewModelFactory = hapticsViewModelFactory,
                 hapticConfigs =
@@ -176,7 +193,10 @@ private fun VolumeDialogSlider(
                     } else {
                         Orientation.Horizontal
                     },
-            ),
+            )
+        } else {
+            Haptics.Disabled
+        },
         stepDistance = 1f,
         track = { sliderState ->
             SliderTrack(
