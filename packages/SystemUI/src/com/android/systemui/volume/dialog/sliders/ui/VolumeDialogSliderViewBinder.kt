@@ -30,6 +30,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.unit.Dp
@@ -44,6 +45,9 @@ import com.android.systemui.res.R
 import com.android.systemui.volume.dialog.domain.interactor.ExpandedAudioTileDetailsFeatureInteractor
 import com.android.systemui.volume.dialog.sliders.dagger.VolumeDialogSliderScope
 import com.android.systemui.volume.dialog.sliders.ui.compose.SliderTrack
+import com.android.systemui.volume.dialog.sliders.ui.compose.rememberGradientColorMode
+import com.android.systemui.volume.dialog.sliders.ui.compose.rememberGradientCustomColors
+import com.android.systemui.volume.dialog.sliders.ui.compose.rememberVolumeGradientEnabled
 import com.android.systemui.volume.dialog.sliders.ui.viewmodel.VolumeDialogOverscrollViewModel
 import com.android.systemui.volume.dialog.sliders.ui.viewmodel.VolumeDialogSliderViewModel
 import com.android.systemui.volume.haptics.ui.VolumeHapticsConfigsProvider
@@ -134,6 +138,16 @@ private fun VolumeDialogSlider(
         }
     }
 
+    val thumbColorOverride: Color? =
+        if (!rememberVolumeGradientEnabled()) {
+            null
+        } else if (rememberGradientColorMode() == 1) {
+            val (customStart, _) = rememberGradientCustomColors()
+            customStart
+        } else {
+            MaterialTheme.colorScheme.primary
+        }
+
     Slider(
         value = sliderStateModel.value,
         valueRange = sliderStateModel.valueRange,
@@ -195,6 +209,7 @@ private fun VolumeDialogSlider(
                     )
                 },
                 trackSize = dimensions.trackSize,
+                ignoreGradient = false,
             )
         },
         thumb = { sliderState, interactions ->
@@ -202,7 +217,9 @@ private fun VolumeDialogSlider(
                 sliderState = sliderState,
                 interactionSource = interactions,
                 enabled = !sliderStateModel.isDisabled,
-                colors = colors,
+                colors = SliderDefaults.colors(
+                    thumbColor = thumbColorOverride ?: SliderDefaults.colors().thumbColor
+                ),
                 thumbSize = DpSize(dimensions.thumbWidth, dimensions.thumbHeight),
             )
         },
