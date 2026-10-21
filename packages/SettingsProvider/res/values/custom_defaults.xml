@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Defaults for the volume slider gradient settings. These match what SystemUI
+         assumes when the settings are absent, so a product only sees a change if it
+         overlays them. -->
+
+    <!-- Default for Settings.System.VOLUME_SLIDER_GRADIENT -->
+    <bool name="def_volume_slider_gradient">false</bool>
+
+    <!-- Default for Settings.System.CUSTOM_GRADIENT_COLOR_MODE:
+         0 = Monet primary to secondary, 1 = the custom start and end colors -->
+    <integer name="def_custom_gradient_color_mode">0</integer>
+
+    <!-- Defaults for Settings.System.CUSTOM_GRADIENT_START_COLOR and _END_COLOR.
+         Transparent stores 0, which SystemUI reads as unset and replaces with the
+         Monet primary and secondary. -->
+    <color name="def_custom_gradient_start_color">#00000000</color>
+    <color name="def_custom_gradient_end_color">#00000000</color>
+</resources>

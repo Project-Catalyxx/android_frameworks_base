@@ -2136,6 +2136,8 @@ class DatabaseHelper extends SQLiteOpenHelper {
             loadIntegerSetting(stmt, Settings.System.POINTER_SPEED,
                     R.integer.def_pointer_speed);
 
+            loadVolumeSliderGradientSettings(stmt);
+
             /*
              * IMPORTANT: Do not add any more upgrade steps here as the global,
              * secure, and system settings are no longer stored in a database
@@ -2170,6 +2172,17 @@ class DatabaseHelper extends SQLiteOpenHelper {
     private void loadDefaultHapticSettings(SQLiteStatement stmt) {
         loadBooleanSetting(stmt, Settings.System.HAPTIC_FEEDBACK_ENABLED,
                 R.bool.def_haptic_feedback);
+    }
+
+    private void loadVolumeSliderGradientSettings(SQLiteStatement stmt) {
+        loadBooleanSetting(stmt, Settings.System.VOLUME_SLIDER_GRADIENT,
+                R.bool.def_volume_slider_gradient);
+        loadIntegerSetting(stmt, Settings.System.CUSTOM_GRADIENT_COLOR_MODE,
+                R.integer.def_custom_gradient_color_mode);
+        loadColorSetting(stmt, Settings.System.CUSTOM_GRADIENT_START_COLOR,
+                R.color.def_custom_gradient_start_color);
+        loadColorSetting(stmt, Settings.System.CUSTOM_GRADIENT_END_COLOR,
+                R.color.def_custom_gradient_end_color);
     }
 
     private void loadSecureSettings(SQLiteDatabase db) {
@@ -2502,6 +2515,11 @@ class DatabaseHelper extends SQLiteOpenHelper {
     private void loadIntegerSetting(SQLiteStatement stmt, String key, int resid) {
         loadSetting(stmt, key,
                 Integer.toString(mContext.getResources().getInteger(resid)));
+    }
+
+    private void loadColorSetting(SQLiteStatement stmt, String key, int resid) {
+        loadSetting(stmt, key,
+                Integer.toString(mContext.getResources().getColor(resid, null)));
     }
 
     private void loadFractionSetting(SQLiteStatement stmt, String key, int resid, int base) {
