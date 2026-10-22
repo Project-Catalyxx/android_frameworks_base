@@ -2138,6 +2138,9 @@ class DatabaseHelper extends SQLiteOpenHelper {
 
             loadVolumeSliderGradientSettings(stmt);
 
+            loadBooleanSetting(stmt, Settings.System.SHOW_VOLUME_PERCENTAGE,
+                    R.bool.def_show_volume_percentage);
+
             /*
              * IMPORTANT: Do not add any more upgrade steps here as the global,
              * secure, and system settings are no longer stored in a database

@@ -16,4 +16,8 @@
          Monet primary and secondary. -->
     <color name="def_custom_gradient_start_color">#00000000</color>
     <color name="def_custom_gradient_end_color">#00000000</color>
+
+    <!-- Default for Settings.System.SHOW_VOLUME_PERCENTAGE: the media volume in percent
+         under the volume dialog's slider. Off, as SystemUI assumes when it is absent. -->
+    <bool name="def_show_volume_percentage">false</bool>
 </resources>
