@@ -28,7 +28,11 @@ constructor(
     private val viewModel: VolumeDialogVolumePercentageViewModel,
 ) : ViewBinder {
     override fun CoroutineScope.bind(view: View) {
-        val percentageText = view.requireViewById<TextView>(R.id.volume_percentage_text)
+        // Only the vertical dialog's layout has the percentage view. The
+        // horizontal one, used with the expanded audio tile details flags,
+        // has none, so show nothing there instead of failing to bind.
+        val percentageText =
+            view.findViewById<TextView>(R.id.volume_percentage_text) ?: return
 
         viewModel.isVisible
             .onEach { isVisible ->
