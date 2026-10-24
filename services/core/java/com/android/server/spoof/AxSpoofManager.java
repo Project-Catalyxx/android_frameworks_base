@@ -94,7 +94,7 @@ public class AxSpoofManager implements IAxSpoofManager {
     private static final String KEYBOX_SOURCE_KEY = "spoof_trickystore_keybox_source";
     private static final String KEYBOX_SOURCE_USER = "user";
     private static final String OFFICIAL_KEYBOX_URL =
-            "https://git.evolution-x.org/EvoX/keybox/raw/branch/main/keybox.xml";
+            "https://gitea.com/Evolution-X/keybox/raw/branch/main/keybox.xml";
 
     private static final String VENDING_PACKAGE = "com.android.vending";
     private static final String[] GMS_FAMILY = {
